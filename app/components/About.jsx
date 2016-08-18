@@ -11,7 +11,7 @@ var React = require('react');
 var About = (props) => {
   return (
     <div>
-      <h1 className="text-center">About</h1>
+      <h1 className="text-center page-title">About</h1>
       <p className="text-justify">This is a simple single-page web app built on the JavaScript library React as a part of Andrew Mead's <i>The Complete Web App Developer Course</i>. Links for the technologies used and its github repository can be found below. </p>
       <div className="menu-centered">
         <ul className="menu">
