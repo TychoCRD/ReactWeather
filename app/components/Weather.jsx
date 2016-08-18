@@ -10,16 +10,18 @@ var Weather = React.createClass({
       isLoading: false
     };
   },
-  handleNewCity: function(city){
+  handleSearch: function(location){
     var that = this;
 
     this.setState({
       isLoading: true,
-      errorMessage: undefined
+      errorMessage: undefined,
+      location: undefined,
+      temp: undefined
     });
-    openWeatherMap.getTemp(city).then(function(temp){
+    openWeatherMap.getTemp(location).then(function(temp){
       that.setState({
-        city: city,
+        location: location,
         temp: temp,
         isLoading: false
 
@@ -31,16 +33,31 @@ var Weather = React.createClass({
       });
 
     });
+  },
+  componentDidMount: function(){
+    var location = this.props.location.query.location;
 
+    if(location && location.length > 0){
+      this.handleSearch(location);
+      window.location.hash = '#/'
+    }
+  },
+  componentWillReceiveProps: function(newProps){
+    var location = newProps.location.query.location;
+
+    if(location && location.length > 0){
+      this.handleSearch(location);
+      window.location.hash = '#/';
+  }
   },
   render: function(){
-    var {isLoading, city, temp, errorMessage} = this.state;
+    var {isLoading, location, temp, errorMessage} = this.state;
 
     function renderMessage(){
       if(isLoading){
         return <h3 className="text-cente">Fetching weather...</h3>;
-      } else if(city && temp) {
-        return <WeatherMessage city={city} temp={temp}/>;
+      } else if(location && temp) {
+        return <WeatherMessage location={location} temp={temp}/>;
       }
     }
 
@@ -55,7 +72,7 @@ var Weather = React.createClass({
     return (
       <div>
       <h1 className="text-center page-title">Get Weather</h1>
-      <WeatherForm onNewCity={this.handleNewCity}/>
+      <WeatherForm onNewSearch={this.handleSearch}/>
       {renderMessage()}
       {renderError()}
       </div>
